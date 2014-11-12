@@ -12,6 +12,8 @@ class Whois
 
     private $servers;
 
+    private $timeout = 15;
+
     /**
      * @param string $domain full domain name (without trailing dot)
      */
@@ -47,7 +49,7 @@ class Whois
                     $url = $whois_server . $this->subDomain . '.' . $this->TLDs;
                     curl_setopt($ch, CURLOPT_URL, $url);
                     curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 0);
-                    curl_setopt($ch, CURLOPT_TIMEOUT, 60);
+                    curl_setopt($ch, CURLOPT_TIMEOUT, $this->getTimeout());
                     curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
                     curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
                     curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
@@ -89,11 +91,10 @@ class Whois
                             }
                         }
                         // Getting whois information
-                        $fp = fsockopen($whois_server, 43);
+                        $fp = fsockopen($whois_server, 43, null, null, $this->getTimeout());
                         if (!$fp) {
                             return "Connection error!";
                         }
-
                         $dom = $this->subDomain . '.' . $this->TLDs;
                         fputs($fp, "$dom\r\n");
 
@@ -197,5 +198,21 @@ class Whois
         }
 
         return false;
+    }
+
+    /**
+     * @param int $timeout
+     */
+    public function setTimeout($timeout)
+    {
+        $this->timeout = $timeout;
+    }
+
+    /**
+     * @return int
+     */
+    public function getTimeout()
+    {
+        return $this->timeout;
     }
 }
