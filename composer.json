@@ -13,9 +13,10 @@
         }
     ],
     "require": {
-        "php": ">=5.3.2"
+        "php":      ">=5.3.2",
+        "ext-curl": "*"
     },
     "autoload": {
-        "psr-0": { "Phois\\Whois": "src" }
+        "psr-4": { "Phois\\Whois\\": "src/" }
     }
 }
