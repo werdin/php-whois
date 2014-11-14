@@ -90,8 +90,10 @@ class Whois
                                 $whois_server = trim($lineArr[1]);
                             }
                         }
+                        $errno= null;
+                        $errstr = null;
                         // Getting whois information
-                        $fp = fsockopen($whois_server, 43, null, null, $this->getTimeout());
+                        $fp = fsockopen($whois_server, 43, $errno, $errstr, $this->getTimeout());
                         if (!$fp) {
                             return "Connection error!";
                         }
